@@ -39,7 +39,6 @@ public class ProcesadorArchivos {
                         String palabra = data.next();
                         bfwriter.write(palabra + "\n");
                         //posteo.agregarPosteo(documento, palabra);
-                        
                     }
                 }
             }

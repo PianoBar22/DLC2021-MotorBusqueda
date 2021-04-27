@@ -14,9 +14,8 @@
   <modules>
             
     <module>Indexador</module>
-          
-    <module>web</module>
     <module>Dominio</module>
+    <module>WebApp</module>
   </modules>
     <properties>
             
