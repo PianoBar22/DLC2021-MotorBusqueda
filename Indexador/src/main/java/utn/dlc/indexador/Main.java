@@ -21,6 +21,6 @@ public class Main {
     public static void main(String[] args) {
         ProcesadorArchivos procesa = new ProcesadorArchivos();
         
-        procesa.procesarCarpeta(new File("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Prueba"));
+        procesa.procesarCarpeta(new File("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Completo"));
  }
 }
