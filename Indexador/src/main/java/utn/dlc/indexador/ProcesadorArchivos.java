@@ -18,13 +18,15 @@ public class ProcesadorArchivos {
     public void procesar(Documento documento){
         try {
             File myObj = new File(documento.getPath());
-            Scanner myReader = new Scanner(myObj);
-            
-            while (myReader.hasNextLine()) {
-              String data = myReader.nextLine();
-              System.out.println(data);
+            try (Scanner myReader = new Scanner(myObj)) {
+                while (myReader.hasNextLine()) {
+                    String data = myReader.nextLine();
+                    String[] splited = data.split(" ");
+                    for (String palabra : splited) {
+                        System.out.println(palabra);
+                    }
+                }
             }
-            myReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
