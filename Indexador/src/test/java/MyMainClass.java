@@ -1,4 +1,5 @@
 
+import java.io.File;
 import utn.dlc.entidades.Documento;
 import utn.dlc.indexador.ProcesadorArchivos;
 
@@ -15,8 +16,7 @@ import utn.dlc.indexador.ProcesadorArchivos;
 public class MyMainClass {
     public static void main(String[] args) {
         ProcesadorArchivos procesa = new ProcesadorArchivos();
-        Documento doc = new Documento();
-        doc.setPath("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Prueba\\0ddc809a.txt");
-        procesa.procesar(doc);
+        System.out.println("hoasd");
+        procesa.procesarCarpeta(new File("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Prueba"));
  }
 }

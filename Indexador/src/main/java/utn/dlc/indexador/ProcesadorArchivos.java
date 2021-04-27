@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import utn.dlc.entidades.Documento;
+import utn.dlc.negocio.PosteoNegocio;
 
 /**
  *
@@ -16,6 +17,7 @@ import utn.dlc.entidades.Documento;
  */
 public class ProcesadorArchivos {
     public void procesar(Documento documento){
+        PosteoNegocio posteo = new PosteoNegocio();
         try {
             File myObj = new File(documento.getPath());
             try (Scanner myReader = new Scanner(myObj)) {
@@ -23,7 +25,7 @@ public class ProcesadorArchivos {
                     String data = myReader.nextLine();
                     String[] splited = data.split(" ");
                     for (String palabra : splited) {
-                        System.out.println(palabra);
+                        posteo.agregarPosteo(documento, palabra);
                     }
                 }
             }
@@ -32,4 +34,18 @@ public class ProcesadorArchivos {
             e.printStackTrace();
         }
     }
+    
+    public void procesarCarpeta(final File folder) {
+    for (final File fileEntry : folder.listFiles()) {
+        if (fileEntry.isDirectory()) {
+            procesarCarpeta(fileEntry);
+        } else {
+            ProcesadorArchivos procesa = new ProcesadorArchivos();
+            Documento doc = new Documento();
+            doc.setPath(fileEntry.getAbsolutePath());
+            System.out.println(doc.getPath());
+            procesa.procesar(doc);
+        }
+    }
+}
 }

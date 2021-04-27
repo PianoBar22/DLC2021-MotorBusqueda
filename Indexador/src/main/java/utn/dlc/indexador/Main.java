@@ -5,6 +5,7 @@
  */
 package utn.dlc.indexador;
 
+import java.io.File;
 import utn.dlc.entidades.Documento;
 
 /**
@@ -19,9 +20,7 @@ public class Main {
      */
     public static void main(String[] args) {
         ProcesadorArchivos procesa = new ProcesadorArchivos();
-        Documento doc = new Documento();
-        doc.setPath("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Prueba\\0ddc809a.txt");
         
-        procesa.procesar(doc);
+        procesa.procesarCarpeta(new File("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Prueba"));
  }
 }
