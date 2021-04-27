@@ -16,9 +16,6 @@ import utn.dlc.entidades.Documento;
  */
 public class ProcesadorArchivos {
     public void procesar(Documento documento){
-        String path;
-        path = documento.getPath();
-        
         try {
             File myObj = new File(documento.getPath());
             Scanner myReader = new Scanner(myObj);
