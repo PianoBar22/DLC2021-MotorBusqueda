@@ -14,9 +14,24 @@ import utn.dlc.entidades.ConfigDB;
  * @author CC31899077
  */
 public class ConfigDbProduces {
+    // DATABASE
+    private static String DBUrl = "jdbc:mysql://localhost:3306/homedb?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    private static String DBUserName = "root";
+    private static String DBPassword = "root";
+
+    private static String DBResourceName = "jdbc/homedb";
+    
     @Produces
     @SessionScoped
     public ConfigDB create(){
-        return new ConfigDB();
+        ConfigDB config = new ConfigDB();
+        
+        config.setConnectionMode(ConfigDB.SINGLECONNECTIONMODE);
+        config.setDriverName(ConfigDB.POSTGRESDRIVERNAME);
+        config.setUrl(DBUrl);
+        config.setUserName(DBUserName);
+        config.setPassword(DBPassword);
+        
+        return config;
     }
 }

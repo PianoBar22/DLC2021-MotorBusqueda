@@ -18,6 +18,7 @@ import java.util.Date;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import utn.dlc.entidades.ConfigDB;
 
 /**
  *
@@ -27,13 +28,7 @@ import javax.sql.DataSource;
 public class DBManager {
     private static final long serialVersionUID = -5234473242999323611L;
     
-    public static final int SINGLECONNECTIONMODE = 1;
-    public static final int POOLCONNECTIONMODE = 2;
-
-    public static final String POSTGRESDRIVERNAME = "org.postgresql.Driver";
-    public static final String MYSQLDRIVERNAME = "???";
-
-    private int connectionMode = SINGLECONNECTIONMODE;
+    private int connectionMode = ConfigDB.SINGLECONNECTIONMODE;
     private String driverName = null;               // "org.postgresql.Driver";
     private String url = null;                      // "jdbc:postgresql://<host>:<port>/<db>";
     private String resourceName = null;             // "[java:comp/env/]jdbc/<dataSourceName>";
@@ -67,8 +62,8 @@ public class DBManager {
      */
     public void setConnectionMode(int connectionMode) {
         this.connectionMode = connectionMode;
-        if (this.connectionMode != POOLCONNECTIONMODE) {
-            this.connectionMode = SINGLECONNECTIONMODE;
+        if (this.connectionMode != ConfigDB.POOLCONNECTIONMODE) {
+            this.connectionMode = ConfigDB.SINGLECONNECTIONMODE;
         }
     }
 
@@ -168,7 +163,7 @@ public class DBManager {
      */
     public void connect() throws Exception {
         if (this.cn == null) {
-            if (this.connectionMode == SINGLECONNECTIONMODE) {
+            if (this.connectionMode == ConfigDB.SINGLECONNECTIONMODE) {
                 Class.forName(driverName);
                 this.cn = DriverManager.getConnection(this.url, this.usr, this.pwd);
             } else {
@@ -228,7 +223,7 @@ public class DBManager {
      */
     public Connection getNewConnection() throws Exception {
         Connection ncn = null;
-        if (this.connectionMode == SINGLECONNECTIONMODE) {
+        if (this.connectionMode == ConfigDB.SINGLECONNECTIONMODE) {
             Class.forName(driverName);
             ncn = DriverManager.getConnection(this.url, this.usr, this.pwd);
         } else {
