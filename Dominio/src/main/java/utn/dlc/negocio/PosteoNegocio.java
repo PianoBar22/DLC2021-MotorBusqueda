@@ -5,16 +5,22 @@
  */
 package utn.dlc.negocio;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import utn.dlc.accesodatos.DBManagerVocabulario;
 import utn.dlc.entidades.Documento;
+import utn.dlc.produces.DBManagerProduces;
 
 /**
  *
  * @author CC31899077
  */
 public class PosteoNegocio {
+    private DBManagerVocabulario dbVocabulario;
+
+    public PosteoNegocio() {
+        dbVocabulario = DBManagerProduces.create();
+    }
+    
+    
     public void agregarPosteo(Documento doc, String palabra){
         
     }

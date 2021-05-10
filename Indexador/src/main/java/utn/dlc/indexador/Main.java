@@ -6,7 +6,12 @@
 package utn.dlc.indexador;
 
 import java.io.File;
-import utn.dlc.entidades.Documento;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import utn.dlc.accesodatos.DBManagerVocabulario;
+import utn.dlc.entidades.Vocabulario;
+import utn.dlc.produces.DBManagerProduces;
 
 /**
  *
@@ -18,9 +23,28 @@ public class Main {
      *
      * @param args
      */
+    
     public static void main(String[] args) {
-        ProcesadorArchivos procesa = new ProcesadorArchivos();
+        try {
+            ProcesadorArchivos procesa = new ProcesadorArchivos();
+
+            procesa.procesarCarpeta(new File("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Completo"));
+//            DBManagerVocabulario db = DBManagerProduces.create();
+//            Iterator it = db.loadList().iterator();
+//            while(it.hasNext()){
+//                System.out.println(it.next());
+//            }
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /*
+    @Inject PruebaInject prueba;
+    
+    public static void main(String[] args) {
+        Prueba prueba = new Prueba();
         
-        procesa.procesarCarpeta(new File("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Completo"));
- }
+        prueba.probando();
+    }*/
 }

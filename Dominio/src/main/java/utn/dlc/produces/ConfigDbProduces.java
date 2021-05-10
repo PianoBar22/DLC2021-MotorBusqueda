@@ -22,12 +22,11 @@ public class ConfigDbProduces {
     private static String DBResourceName = "jdbc/homedb";
     
     @Produces
-    @SessionScoped
-    public ConfigDB create(){
+    public static ConfigDB create(){
         ConfigDB config = new ConfigDB();
         
         config.setConnectionMode(ConfigDB.SINGLECONNECTIONMODE);
-        config.setDriverName(ConfigDB.POSTGRESDRIVERNAME);
+        config.setDriverName(ConfigDB.MYSQLDRIVERNAME);
         config.setUrl(DBUrl);
         config.setUserName(DBUserName);
         config.setPassword(DBPassword);
