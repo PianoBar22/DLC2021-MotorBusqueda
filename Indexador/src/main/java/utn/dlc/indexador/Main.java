@@ -6,12 +6,8 @@
 package utn.dlc.indexador;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utn.dlc.accesodatos.DBManagerVocabulario;
-import utn.dlc.entidades.Vocabulario;
-import utn.dlc.produces.DBManagerProduces;
 
 /**
  *
@@ -28,7 +24,7 @@ public class Main {
         try {
             ProcesadorArchivos procesa = new ProcesadorArchivos();
 
-            procesa.procesarCarpeta(new File("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Completo"));
+            procesa.procesarCarpeta(new File("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Prueba"));
 //            DBManagerVocabulario db = DBManagerProduces.create();
 //            Iterator it = db.loadList().iterator();
 //            while(it.hasNext()){

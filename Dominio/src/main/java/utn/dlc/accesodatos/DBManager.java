@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.Date;
@@ -283,9 +284,17 @@ public class DBManager {
      * @throws Exception
      */
     public void prepare(String statement) throws Exception {
-        this.pstmt = this.cn.prepareStatement(statement, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        int columnIndexes[] = new int[]{Statement.RETURN_GENERATED_KEYS, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY};
+        this.pstmt = this.cn.prepareStatement(statement, columnIndexes);
     }
 
+    public void addBatch() throws SQLException{
+        this.pstmt.addBatch();
+    }
+    
+    public void executeBatch() throws SQLException{
+        this.pstmt.executeBatch();
+    }
     /**
      * Ejecuta una instrucción SQL, previamente preparada/precomplidada,
      * utilizando un PreparedStatement.
@@ -313,6 +322,32 @@ public class DBManager {
     }
 
     /**
+     *
+     * @return
+     * @throws Exception
+     */
+    public int executeUpdate() throws Exception {
+        if (this.pstmt == null) {
+            throw new Exception("DBManager Error: se intenta ejecutar una query NO preparada/precompilada.");
+        }
+        return this.pstmt.executeUpdate();
+    }
+    
+    public float getIdAffected() throws Exception {
+        if (this.pstmt == null) {
+            throw new Exception("DBManager Error: se intenta ejecutar una query NO preparada/precompilada.");
+        }
+        try (ResultSet generatedKeys = this.pstmt.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                return generatedKeys.getLong(1);
+            }
+            else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+        }
+    }
+    
+    /**
      * Setea un parámentro de tipo Integer de una instrucción SQL,
      * previamente preparada/precompilada, utilizando un PreparedStatement.
      *
@@ -327,6 +362,20 @@ public class DBManager {
         this.pstmt.setInt(parameterIndex, value);
     }
 
+    /**
+     * Setea un parámentro de tipo Integer de una instrucción SQL,
+     * previamente preparada/precompilada, utilizando un PreparedStatement.
+     *
+     * @param parameterIndex
+     * @param value
+     * @throws Exception
+     */
+    public void setFloat(int parameterIndex, float value) throws Exception {
+        if (this.pstmt == null) {
+            throw new Exception("DBManager Error: se intenta parametrizar una instrucción/query NO preparada/precompilada.");
+        }
+        this.pstmt.setFloat(parameterIndex, value);
+    }
     /**
      * Setea un parámentro de tipo Integer de una instrucción SQL,
      * previamente preparada/precompilada, utilizando un PreparedStatement.

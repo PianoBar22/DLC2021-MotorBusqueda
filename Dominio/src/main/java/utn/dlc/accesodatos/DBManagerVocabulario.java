@@ -24,11 +24,11 @@ public class DBManagerVocabulario extends DBManager{
     private static Vocabulario buildVocabulario(ResultSet rs) throws SQLException {
         Vocabulario vocabulario = null;
         if (rs.next()) {
-            vocabulario = new Vocabulario();
-            vocabulario.setId(rs.getFloat(ID));
-            vocabulario.setPalabra(rs.getString(PALABRA));
-            vocabulario.setCantDocumentos(rs.getInt(CANT_DOC));
-            vocabulario.setMaxRf(rs.getInt(MAXRF));
+            vocabulario = new Vocabulario(
+                            rs.getFloat(ID), 
+                            rs.getString(PALABRA),
+                            rs.getInt(CANT_DOC),
+                            rs.getInt(MAXRF));
         }
         return vocabulario;
     }
@@ -76,5 +76,56 @@ public class DBManagerVocabulario extends DBManager{
      */
     public List loadList() throws Exception {
         return loadList(0, 0);
+    }
+    
+    /**
+     * Guarda un alumno en la ddbb.
+     *
+     * @param db
+     * @param vocabulario
+     * @return
+     * @throws Exception
+     */
+    public float saveDB(Vocabulario vocabulario) throws Exception {
+        if (vocabulario==null) throw new Exception("DBAlumno Error: Alumno NO especificado");
+        String query = "INSERT INTO Vocabulario(Palabra, CantDocumentos, MaxRf) values(?, ?, ?)";
+        this.prepare(query);
+        this.setString(1, vocabulario.getPalabra());
+        this.setFloat(2, vocabulario.getCant_documentos());
+        this.setFloat(3, vocabulario.getMax_rf());
+        
+        if (this.executeUpdate() == 0){
+            throw new SQLException("Creating user failed, no ID obtained.");
+        }else
+        {
+            return this.getIdAffected();
+        }
+    }
+    
+    public float saveDB(ArrayList<Vocabulario> list) throws Exception {
+        if (list==null) throw new Exception("DBAlumno Error: Alumno NO especificado");
+        String query = "INSERT INTO Vocabulario(Palabra, CantDocumentos, MaxRf) values(?, ?, ?)";
+        this.prepare(query);
+        boolean autoCommit = this.cn.getAutoCommit();
+        
+        this.cn.setAutoCommit(false);
+        for(Vocabulario vocabulario: list)
+        {
+            this.setString(1, vocabulario.getPalabra());
+            this.setFloat(2, vocabulario.getCant_documentos());
+            this.setFloat(3, vocabulario.getMax_rf());
+            this.pstmt.addBatch();
+        }
+        int[] arr = this.pstmt.executeBatch();
+        this.cn.commit();
+        this.cn.setAutoCommit(autoCommit);
+        return arr.length;
+        /*
+        if (this.executeUpdate() == 0){
+            throw new SQLException("Creating user failed, no ID obtained.");
+        }else
+        {
+            return this.getIdAffected();
+        }*/
     }
 }

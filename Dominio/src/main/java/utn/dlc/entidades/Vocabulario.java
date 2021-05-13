@@ -15,6 +15,19 @@ public class Vocabulario {
     private Integer cant_documentos;
     private Integer max_rf;
 
+    public Vocabulario(String palabra, Integer cant_documentos, Integer max_rf) {
+        this.palabra = palabra;
+        this.cant_documentos = cant_documentos;
+        this.max_rf = max_rf;
+    }
+
+    public Vocabulario(Float id, String palabra, Integer cant_documentos, Integer max_rf) {
+        this.id = id;
+        this.palabra = palabra;
+        this.cant_documentos = cant_documentos;
+        this.max_rf = max_rf;
+    }
+    
     public Float getId() {
         return id;
     }
