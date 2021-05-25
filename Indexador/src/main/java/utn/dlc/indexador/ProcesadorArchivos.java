@@ -7,6 +7,8 @@ package utn.dlc.indexador;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -44,6 +46,7 @@ public class ProcesadorArchivos {
     
     public void procesarCarpeta(final File folder) {
         File[] lista;
+        
         if (folder.isDirectory()){
             lista = folder.listFiles();
         }else
@@ -55,10 +58,13 @@ public class ProcesadorArchivos {
             if (fileEntry.isDirectory()) {
                 procesarCarpeta(fileEntry);
             } else {
+                Instant start = Instant.now();
                 Documento doc = new Documento();
                 doc.setPath(fileEntry.getAbsolutePath());
                 System.out.println(doc.getPath());
                 procesarDocumento(doc);
+                Duration interval = Duration.between(start, Instant.now());
+                System.out.println("Execution time in seconds: " + interval.getSeconds());
             }
         }
 }

@@ -292,8 +292,8 @@ public class DBManager {
         this.pstmt.addBatch();
     }
     
-    public void executeBatch() throws SQLException{
-        this.pstmt.executeBatch();
+    public int[] executeBatch() throws SQLException{
+        return this.pstmt.executeBatch();
     }
     /**
      * Ejecuta una instrucción SQL, previamente preparada/precomplidada,

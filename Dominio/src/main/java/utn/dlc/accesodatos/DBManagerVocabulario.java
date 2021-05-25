@@ -7,6 +7,7 @@ package utn.dlc.accesodatos;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import utn.dlc.entidades.Vocabulario;
@@ -25,7 +26,7 @@ public class DBManagerVocabulario extends DBManager{
         Vocabulario vocabulario = null;
         if (rs.next()) {
             vocabulario = new Vocabulario(
-                            rs.getFloat(ID), 
+                            //rs.getFloat(ID), 
                             rs.getString(PALABRA),
                             rs.getInt(CANT_DOC),
                             rs.getInt(MAXRF));
@@ -104,22 +105,41 @@ public class DBManagerVocabulario extends DBManager{
     
     public float saveDB(ArrayList<Vocabulario> list) throws Exception {
         if (list==null) throw new Exception("DBAlumno Error: Alumno NO especificado");
-        String query = "INSERT INTO Vocabulario(Palabra, CantDocumentos, MaxRf) values(?, ?, ?)";
+        String query = "INSERT INTO VocabularioSinID(Palabra, CantDocumentos, MaxRf) values(?, ?, ?)";
         this.prepare(query);
-        boolean autoCommit = this.cn.getAutoCommit();
+        this.beginTransaction();
         
-        this.cn.setAutoCommit(false);
+        int batchSize = 1000;
+        int cant = 1;
+        
+        ArrayList<Integer> listIndex = new ArrayList<Integer>();
+        
         for(Vocabulario vocabulario: list)
         {
             this.setString(1, vocabulario.getPalabra());
             this.setFloat(2, vocabulario.getCant_documentos());
             this.setFloat(3, vocabulario.getMax_rf());
-            this.pstmt.addBatch();
+            this.addBatch();
+            
+            if (cant % batchSize == 0){
+                int[] arr = this.executeBatch();
+                for(int i : arr){
+                    listIndex.add(i);
+                }
+            }
+            cant++;
         }
-        int[] arr = this.pstmt.executeBatch();
-        this.cn.commit();
-        this.cn.setAutoCommit(autoCommit);
-        return arr.length;
+        int[] arr = this.executeBatch();
+        for(int i : arr){
+            listIndex.add(i);
+        }
+        
+        this.commit();
+        for (int i = 0; i < list.size(); i++) {
+            Vocabulario voc = list.get(i);
+            voc.setId(Float.parseFloat(listIndex.get(i).toString()));
+        }
+        return listIndex.size();
         /*
         if (this.executeUpdate() == 0){
             throw new SQLException("Creating user failed, no ID obtained.");
