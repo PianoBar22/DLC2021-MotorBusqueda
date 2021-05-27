@@ -5,10 +5,17 @@
  */
 package utn.dlc.accesodatos;
 
+import java.util.ArrayList;
+import utn.dlc.entidades.Post;
+
 /**
  *
  * @author CC31899077
  */
 public class DBManagerPost extends DBManager {
+
+    public float saveDB(ArrayList<Post> list) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

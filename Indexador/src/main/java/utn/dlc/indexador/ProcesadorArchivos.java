@@ -59,8 +59,7 @@ public class ProcesadorArchivos {
                 procesarCarpeta(fileEntry);
             } else {
                 Instant start = Instant.now();
-                Documento doc = new Documento();
-                doc.setPath(fileEntry.getAbsolutePath());
+                Documento doc = new Documento(fileEntry.getAbsolutePath());
                 System.out.println(doc.getPath());
                 procesarDocumento(doc);
                 Duration interval = Duration.between(start, Instant.now());

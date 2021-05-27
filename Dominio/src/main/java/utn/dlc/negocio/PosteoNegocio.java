@@ -9,10 +9,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import utn.dlc.accesodatos.DBManagerPost;
 import utn.dlc.accesodatos.DBManagerVocabulario;
 import utn.dlc.entidades.Documento;
+import utn.dlc.entidades.Post;
 import utn.dlc.entidades.Vocabulario;
 import utn.dlc.produces.DBManagerProduces;
 
@@ -22,36 +27,48 @@ import utn.dlc.produces.DBManagerProduces;
  */
 public class PosteoNegocio {
     private DBManagerVocabulario dbVocabulario;
+    private DBManagerPost dbPost;
+    private HashMap<String, Vocabulario> listVoc;
 
     public PosteoNegocio() {
-        dbVocabulario = DBManagerProduces.create();
+        try {
+            dbVocabulario = DBManagerProduces.createVocabulario();
+            dbPost = DBManagerProduces.createPost();
+            this.listVoc = dbVocabulario.loadListHash();
+            
+        } catch (Exception ex) {
+            Logger.getLogger(PosteoNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    private void guardarPosteoEnArchivo(Iterator it, Documento doc){
+    private void guardarPosteoEnBD(Iterator it, Documento doc){
         try {
-            String ruta = "C:\\UTN\\DLC\\Posteos\\";
-            File fileOrigen = new File(doc.getPath());
-            File fileDestino = new File(ruta + fileOrigen.getName());
-            // Si el archivo no existe es creado
-            if (!fileDestino.exists()) {
-                fileDestino.createNewFile();
-            }
-            FileWriter fw = new FileWriter(fileDestino, fileDestino.exists());
-            BufferedWriter bw = new BufferedWriter(fw);
-            ArrayList<Vocabulario> list = new ArrayList<Vocabulario>();
+            ArrayList<Post> list = new ArrayList<Post>();
             while(it.hasNext()){
                 Map.Entry me = (Map.Entry)it.next();
                 String palabra = (String) me.getKey();
                 Integer cantPalabras = (Integer) me.getValue();
                 
-                bw.write(palabra + " " + cantPalabras);
-                Vocabulario vocabulario = new Vocabulario(palabra, 1, cantPalabras);
-                list.add(vocabulario);
-                //float newId = dbVocabulario.saveDB(vocabulario);
-                bw.newLine();
+                
+                Vocabulario vocabulario = this.listVoc.get(palabra);
+                if (vocabulario == null){
+                    vocabulario = new Vocabulario(palabra, 1, cantPalabras);
+                }
+                else
+                {
+                    vocabulario.setCantDocumentos(vocabulario.getCant_documentos() + 1);
+                    if (vocabulario.getMax_rf() < cantPalabras){
+                        vocabulario.setMaxRf(cantPalabras);
+                    }
+                }
+                    
+                Documento documento = new Documento(doc.getPath());
+                
+                Post post = new Post(vocabulario, documento, cantPalabras);
+                list.add(post);
             }
-            bw.close();
-            float ret = dbVocabulario.saveDB(list);
+            
+            float ret = dbPost.saveDB(list);
             System.out.println(ret);
             
         } catch (Exception e) {
@@ -60,6 +77,6 @@ public class PosteoNegocio {
     }
     
     public void agregarPosteo(Iterator it, Documento doc){
-        guardarPosteoEnArchivo(it, doc);
+        guardarPosteoEnBD(it, doc);
     }
 }

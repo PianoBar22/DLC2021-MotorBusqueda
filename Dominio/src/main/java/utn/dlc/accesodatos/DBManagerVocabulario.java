@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import utn.dlc.entidades.Vocabulario;
 
@@ -79,6 +80,15 @@ public class DBManagerVocabulario extends DBManager{
         return loadList(0, 0);
     }
     
+    public HashMap<String, Vocabulario> loadListHash() throws Exception{
+        ArrayList<Vocabulario> list = (ArrayList<Vocabulario>) this.loadList(0, 0);
+        HashMap<String, Vocabulario> map = new HashMap<String, Vocabulario>();
+        
+        for(Vocabulario voc : list){
+            map.put(voc.getPalabra(), voc);
+        }
+        return map;
+    }
     /**
      * Guarda un alumno en la ddbb.
      *
@@ -97,7 +107,8 @@ public class DBManagerVocabulario extends DBManager{
         
         if (this.executeUpdate() == 0){
             throw new SQLException("Creating user failed, no ID obtained.");
-        }else
+        }
+        else
         {
             return this.getIdAffected();
         }
@@ -112,7 +123,7 @@ public class DBManagerVocabulario extends DBManager{
         int batchSize = 1000;
         int cant = 1;
         
-        ArrayList<Integer> listIndex = new ArrayList<Integer>();
+        ArrayList<Long> listIndex = new ArrayList<Long>();
         
         for(Vocabulario vocabulario: list)
         {
@@ -123,21 +134,21 @@ public class DBManagerVocabulario extends DBManager{
             
             if (cant % batchSize == 0){
                 int[] arr = this.executeBatch();
-                for(int i : arr){
+                for(long i : arr){
                     listIndex.add(i);
                 }
             }
             cant++;
         }
         int[] arr = this.executeBatch();
-        for(int i : arr){
+        for(long i : arr){
             listIndex.add(i);
         }
         
         this.commit();
         for (int i = 0; i < list.size(); i++) {
             Vocabulario voc = list.get(i);
-            voc.setId(Float.parseFloat(listIndex.get(i).toString()));
+            voc.setId(listIndex.get(i));
         }
         return listIndex.size();
         /*

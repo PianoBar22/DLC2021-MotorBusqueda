@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import utn.dlc.accesodatos.DBManagerDocumento;
+import utn.dlc.accesodatos.DBManagerPost;
 import utn.dlc.accesodatos.DBManagerVocabulario;
 import utn.dlc.entidades.ConfigDB;
 
@@ -20,17 +22,39 @@ public class DBManagerProduces {
     @Inject ConfigDB config;
 
     @Produces
-    public static DBManagerVocabulario create(){
+    public static DBManagerVocabulario createVocabulario(){
         try {
             DBManagerVocabulario db = new DBManagerVocabulario();
             ConfigDB config = ConfigDbProduces.create();
-            
-            db.setConnectionMode(config.getConnectionMode());
-            db.setDriverName(config.getDriverName());
-            db.setUrl(config.getUrl());
-            db.setUserName(config.getUserName());
-            db.setPassword(config.getPassword());
+            db.setConfig(config);
             db.connect();
+            return db;
+        } catch (Exception ex) {
+            Logger.getLogger(DBManagerProduces.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    @Produces
+    public static DBManagerPost createPost(){
+        try {
+            DBManagerPost db = new DBManagerPost();
+            ConfigDB config = ConfigDbProduces.create();
+            
+            db.setConfig(config);
+            return db;
+        } catch (Exception ex) {
+            Logger.getLogger(DBManagerProduces.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public static DBManagerDocumento createDocumento(){
+        try {
+            DBManagerDocumento db = new DBManagerDocumento();
+            ConfigDB config = ConfigDbProduces.create();
+            
+            db.setConfig(config);
             return db;
         } catch (Exception ex) {
             Logger.getLogger(DBManagerProduces.class.getName()).log(Level.SEVERE, null, ex);

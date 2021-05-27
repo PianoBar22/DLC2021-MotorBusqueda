@@ -20,6 +20,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import utn.dlc.entidades.ConfigDB;
+import utn.dlc.produces.ConfigDbProduces;
 
 /**
  *
@@ -41,6 +42,7 @@ public class DBManager {
     Statement stmt = null;
     PreparedStatement pstmt = null;
     CallableStatement cstmt = null;
+    private ConfigDB config;
 
     /**
      * Creates a new instance of DBManager
@@ -506,5 +508,19 @@ public class DBManager {
         } else {
             this.pstmt.setDate(parameterIndex, (java.sql.Date) value);
         }
+    }
+
+    public ConfigDB getConfig() {
+        return config;
+    }
+
+    public void setConfig(ConfigDB config) {
+        this.config = config;
+        
+        this.setConnectionMode(config.getConnectionMode());
+        this.setDriverName(config.getDriverName());
+        this.setUrl(config.getUrl());
+        this.setUserName(config.getUserName());
+        this.setPassword(config.getPassword());
     }
 }

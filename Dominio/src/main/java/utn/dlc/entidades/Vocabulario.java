@@ -10,7 +10,7 @@ package utn.dlc.entidades;
  * @author CC31899077
  */
 public class Vocabulario {
-    private Float id;
+    private Long id;
     private String palabra;
     private Integer cant_documentos;
     private Integer max_rf;
@@ -19,20 +19,21 @@ public class Vocabulario {
         this.palabra = palabra;
         this.cant_documentos = cant_documentos;
         this.max_rf = max_rf;
+        this.id = 0L;
     }
 
-    public Vocabulario(Float id, String palabra, Integer cant_documentos, Integer max_rf) {
+    public Vocabulario(Long id, String palabra, Integer cant_documentos, Integer max_rf) {
         this.id = id;
         this.palabra = palabra;
         this.cant_documentos = cant_documentos;
         this.max_rf = max_rf;
     }
     
-    public Float getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Float id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

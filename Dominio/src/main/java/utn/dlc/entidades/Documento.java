@@ -13,6 +13,10 @@ public class Documento {
     
     private String path;
 
+    public Documento(String path) {
+        this.path = path;
+    }
+
     /**
      * Get the value of path
      *
