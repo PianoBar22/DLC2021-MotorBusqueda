@@ -5,10 +5,16 @@
  */
 package utn.dlc.accesodatos;
 
+import utn.dlc.entidades.Documento;
+
 /**
  *
  * @author CC31899077
  */
 public class DBManagerDocumento extends DBManager{
+
+    long saveDB(Documento documento) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

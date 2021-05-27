@@ -47,12 +47,12 @@ public class PosteoNegocio {
             while(it.hasNext()){
                 Map.Entry me = (Map.Entry)it.next();
                 String palabra = (String) me.getKey();
-                Integer cantPalabras = (Integer) me.getValue();
+                Long cantPalabras = (Long) me.getValue();
                 
                 
                 Vocabulario vocabulario = this.listVoc.get(palabra);
                 if (vocabulario == null){
-                    vocabulario = new Vocabulario(palabra, 1, cantPalabras);
+                    vocabulario = new Vocabulario(palabra, 1L, cantPalabras);
                 }
                 else
                 {

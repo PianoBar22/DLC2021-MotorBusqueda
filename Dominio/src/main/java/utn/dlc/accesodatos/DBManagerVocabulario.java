@@ -27,10 +27,10 @@ public class DBManagerVocabulario extends DBManager{
         Vocabulario vocabulario = null;
         if (rs.next()) {
             vocabulario = new Vocabulario(
-                            //rs.getFloat(ID), 
+                            rs.getLong(ID), 
                             rs.getString(PALABRA),
-                            rs.getInt(CANT_DOC),
-                            rs.getInt(MAXRF));
+                            rs.getLong(CANT_DOC),
+                            rs.getLong(MAXRF));
         }
         return vocabulario;
     }
@@ -97,13 +97,51 @@ public class DBManagerVocabulario extends DBManager{
      * @return
      * @throws Exception
      */
-    public float saveDB(Vocabulario vocabulario) throws Exception {
+    public long saveDB(Vocabulario vocabulario) throws Exception {
         if (vocabulario==null) throw new Exception("DBAlumno Error: Alumno NO especificado");
-        String query = "INSERT INTO Vocabulario(Palabra, CantDocumentos, MaxRf) values(?, ?, ?)";
-        this.prepare(query);
+        
+        if(vocabulario.getId() > 0){
+            return this.updateDB(vocabulario);
+        }
+        else
+        {
+            return this.insertDB(vocabulario);
+        }
+    }
+    
+    private long updateDB(Vocabulario vocabulario) throws Exception{
+        StringBuilder query = new StringBuilder();
+        
+        query.append("UPDATE Vocabulario SET ");
+        query.append("CantDocumentos = ?,");
+        query.append("MaxRf = ?");
+        query.append("WHERE ID = ?");
+        
+        this.prepare(query.toString());
+        this.setLong(1, vocabulario.getCant_documentos());
+        this.setLong(2, vocabulario.getMax_rf());
+        this.setLong(3, vocabulario.getId());
+        
+        if (this.executeUpdate() == 0){
+            throw new SQLException("Creating user failed, no ID obtained.");
+        }
+        else
+        {
+            return this.getIdAffected();
+        }
+    }
+    
+    private long insertDB(Vocabulario vocabulario) throws Exception{
+        StringBuilder query = new StringBuilder();
+        
+        query.append("INSERT INTO Vocabulario ");
+        query.append("(Palabra, CantDocumentos, MaxRf) ");
+        query.append("VALUES(?, ?, ?)");
+        
+        this.prepare(query.toString());
         this.setString(1, vocabulario.getPalabra());
-        this.setFloat(2, vocabulario.getCant_documentos());
-        this.setFloat(3, vocabulario.getMax_rf());
+        this.setLong(2, vocabulario.getCant_documentos());
+        this.setLong(3, vocabulario.getMax_rf());
         
         if (this.executeUpdate() == 0){
             throw new SQLException("Creating user failed, no ID obtained.");

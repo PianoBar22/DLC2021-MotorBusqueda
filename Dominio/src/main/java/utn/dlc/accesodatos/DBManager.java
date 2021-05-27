@@ -335,7 +335,7 @@ public class DBManager {
         return this.pstmt.executeUpdate();
     }
     
-    public float getIdAffected() throws Exception {
+    public long getIdAffected() throws Exception {
         if (this.pstmt == null) {
             throw new Exception("DBManager Error: se intenta ejecutar una query NO preparada/precompilada.");
         }
@@ -397,6 +397,17 @@ public class DBManager {
         }
     }
 
+    public void setLong(int parameterIndex, Long value) throws Exception{
+        if (this.pstmt == null) {
+            throw new Exception("DBManager Error: se intenta parametrizar una instrucción/query NO preparada/precompilada.");
+        }
+        if (value == null) {
+            this.pstmt.setNull(parameterIndex, Types.BIGINT);
+        } else {
+            this.pstmt.setLong(parameterIndex, value);
+        }
+    }
+    
     /**
      * Setea un parámentro de tipo ShortInt de una instrucción SQL,
      * previamente preparada/precompilada, utilizando un PreparedStatement.

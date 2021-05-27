@@ -12,17 +12,17 @@ package utn.dlc.entidades;
 public class Vocabulario {
     private Long id;
     private String palabra;
-    private Integer cant_documentos;
-    private Integer max_rf;
+    private Long cant_documentos;
+    private Long max_rf;
 
-    public Vocabulario(String palabra, Integer cant_documentos, Integer max_rf) {
+    public Vocabulario(String palabra, Long cant_documentos, Long max_rf) {
         this.palabra = palabra;
         this.cant_documentos = cant_documentos;
         this.max_rf = max_rf;
         this.id = 0L;
     }
 
-    public Vocabulario(Long id, String palabra, Integer cant_documentos, Integer max_rf) {
+    public Vocabulario(Long id, String palabra, Long cant_documentos, Long max_rf) {
         this.id = id;
         this.palabra = palabra;
         this.cant_documentos = cant_documentos;
@@ -45,19 +45,19 @@ public class Vocabulario {
         this.palabra = palabra;
     }
 
-    public Integer getCant_documentos() {
+    public Long getCant_documentos() {
         return cant_documentos;
     }
 
-    public void setCantDocumentos(Integer cant_documentos) {
+    public void setCantDocumentos(Long cant_documentos) {
         this.cant_documentos = cant_documentos;
     }
 
-    public Integer getMax_rf() {
+    public Long getMax_rf() {
         return max_rf;
     }
 
-    public void setMaxRf(Integer max_rf) {
+    public void setMaxRf(Long max_rf) {
         this.max_rf = max_rf;
     }
 

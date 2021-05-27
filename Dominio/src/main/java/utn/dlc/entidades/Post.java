@@ -12,9 +12,9 @@ package utn.dlc.entidades;
 public class Post {
     private Vocabulario vocabulario;
     private Documento documento;
-    private int frecuencia;
+    private long frecuencia;
 
-    public Post(Vocabulario vocabulario, Documento documento, int frecuencia) {
+    public Post(Vocabulario vocabulario, Documento documento, long frecuencia) {
         this.vocabulario = vocabulario;
         this.documento = documento;
         this.frecuencia = frecuencia;
@@ -37,11 +37,11 @@ public class Post {
         this.documento = documento;
     }
 
-    public int getFrecuencia() {
+    public long getFrecuencia() {
         return frecuencia;
     }
 
-    public void setFrecuencia(int frecuencia) {
+    public void setFrecuencia(long frecuencia) {
         this.frecuencia = frecuencia;
     }
     
