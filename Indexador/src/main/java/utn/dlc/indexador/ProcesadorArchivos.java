@@ -12,6 +12,8 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utn.dlc.entidades.Documento;
 import utn.dlc.negocio.PosteoNegocio;
 
@@ -20,8 +22,14 @@ import utn.dlc.negocio.PosteoNegocio;
  * @author CC31899077
  */
 public class ProcesadorArchivos {
+    private PosteoNegocio posteoNegocio;
+
+    public ProcesadorArchivos() {
+        posteoNegocio = new PosteoNegocio();
+    }
+    
+    
     private void procesarDocumento(Documento documento) {
-        PosteoNegocio posteo = new PosteoNegocio();
         
         try {
             File myObj = new File(documento.getPath());
@@ -29,14 +37,14 @@ public class ProcesadorArchivos {
             try (Scanner myReader = new Scanner(myObj)) {
                 myReader.useDelimiter("[ .,/[\\r\\n;]\\[\\]'\\(\\)\\-\":;0-9!?@*]");
                 
-                HashMap<String, Integer> palabras = new HashMap<>(); 
+                HashMap<String, Long> palabras = new HashMap<>(); 
                 myReader.tokens()
                         .filter(p -> p.length() >= 2)
                         .map(p -> p.toLowerCase())
-                        .forEach(entry -> palabras.put(entry, palabras.getOrDefault(entry, 0) + 1));
+                        .forEach(entry -> palabras.put(entry, palabras.getOrDefault(entry, 0L) + 1));
                 
                 Iterator it = palabras.entrySet().iterator();
-                posteo.agregarPosteo(it, documento);
+                this.posteoNegocio.agregarPosteo(it, documento);
             }
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
@@ -67,4 +75,12 @@ public class ProcesadorArchivos {
             }
         }
 }
+
+    void ActualizarVocabulario() {
+        try {
+            this.posteoNegocio.ActualizarVocabulario();
+        } catch (Exception ex) {
+            Logger.getLogger(ProcesadorArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

@@ -12,9 +12,24 @@ package utn.dlc.entidades;
 public class Documento {
     
     private String path;
+    private Long id;
 
+    public Documento(long id, String path) {
+        this.path = path;
+        this.id = id;
+    }
+    
     public Documento(String path) {
         this.path = path;
+        this.id = 0L;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**

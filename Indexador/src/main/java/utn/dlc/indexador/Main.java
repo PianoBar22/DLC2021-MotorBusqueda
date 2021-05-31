@@ -25,6 +25,7 @@ public class Main {
             ProcesadorArchivos procesa = new ProcesadorArchivos();
 
             procesa.procesarCarpeta(new File("C:\\UTN\\DLC\\POMMotorBusqueda\\Documentos\\Prueba"));
+            procesa.ActualizarVocabulario();
 //            DBManagerVocabulario db = DBManagerProduces.create();
 //            Iterator it = db.loadList().iterator();
 //            while(it.hasNext()){

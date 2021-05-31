@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.naming.Context;
@@ -297,6 +298,12 @@ public class DBManager {
     public int[] executeBatch() throws SQLException{
         return this.pstmt.executeBatch();
     }
+
+    public ArrayList<Long> executeBatchKeys() throws SQLException, Exception{
+        this.pstmt.executeBatch();
+        return this.getGeneratedKeys();
+    }
+
     /**
      * Ejecuta una instrucción SQL, previamente preparada/precomplidada,
      * utilizando un PreparedStatement.
@@ -339,6 +346,7 @@ public class DBManager {
         if (this.pstmt == null) {
             throw new Exception("DBManager Error: se intenta ejecutar una query NO preparada/precompilada.");
         }
+        
         try (ResultSet generatedKeys = this.pstmt.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 return generatedKeys.getLong(1);
@@ -347,6 +355,20 @@ public class DBManager {
                 throw new SQLException("Creating user failed, no ID obtained.");
             }
         }
+    }
+    
+    private ArrayList<Long> getGeneratedKeys() throws Exception {
+        if (this.pstmt == null) {
+            throw new Exception("DBManager Error: se intenta ejecutar una query NO preparada/precompilada.");
+        }
+
+        ArrayList<Long> ret = new ArrayList<>();
+        ResultSet rs = this.pstmt.getGeneratedKeys();
+        while (rs.next()){
+            ret.add(rs.getLong(1));
+        }
+        
+        return ret;
     }
     
     /**

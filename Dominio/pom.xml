@@ -9,7 +9,7 @@
     <artifactId>Dominio</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <maven.compiler.source>6</maven.compiler.source>
+        <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>6</maven.compiler.target>
     </properties>
     <name>Dominio</name>

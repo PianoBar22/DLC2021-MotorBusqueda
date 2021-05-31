@@ -14,12 +14,14 @@ public class Vocabulario {
     private String palabra;
     private Long cant_documentos;
     private Long max_rf;
+    private boolean modificado;
 
     public Vocabulario(String palabra, Long cant_documentos, Long max_rf) {
         this.palabra = palabra;
         this.cant_documentos = cant_documentos;
         this.max_rf = max_rf;
         this.id = 0L;
+        this.modificado = false;
     }
 
     public Vocabulario(Long id, String palabra, Long cant_documentos, Long max_rf) {
@@ -27,6 +29,15 @@ public class Vocabulario {
         this.palabra = palabra;
         this.cant_documentos = cant_documentos;
         this.max_rf = max_rf;
+        this.modificado = false;
+    }
+
+    public boolean isModificado() {
+        return modificado;
+    }
+
+    public void setModificado(boolean modificado) {
+        this.modificado = modificado;
     }
     
     public long getId() {

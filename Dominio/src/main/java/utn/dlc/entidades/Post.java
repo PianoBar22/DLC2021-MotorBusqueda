@@ -10,6 +10,7 @@ package utn.dlc.entidades;
  * @author CC31899077
  */
 public class Post {
+    private long id;
     private Vocabulario vocabulario;
     private Documento documento;
     private long frecuencia;
@@ -18,8 +19,23 @@ public class Post {
         this.vocabulario = vocabulario;
         this.documento = documento;
         this.frecuencia = frecuencia;
+        this.id = 0L;
+    }
+    
+    public Post(long id, Vocabulario vocabulario, Documento documento, long frecuencia) {
+        this.vocabulario = vocabulario;
+        this.documento = documento;
+        this.frecuencia = frecuencia;
+        this.id = id;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
     
     public Vocabulario getVocabulario() {
         return vocabulario;

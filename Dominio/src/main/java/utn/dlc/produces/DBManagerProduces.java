@@ -42,6 +42,7 @@ public class DBManagerProduces {
             ConfigDB config = ConfigDbProduces.create();
             
             db.setConfig(config);
+            db.connect();
             return db;
         } catch (Exception ex) {
             Logger.getLogger(DBManagerProduces.class.getName()).log(Level.SEVERE, null, ex);
@@ -55,6 +56,7 @@ public class DBManagerProduces {
             ConfigDB config = ConfigDbProduces.create();
             
             db.setConfig(config);
+            db.connect();
             return db;
         } catch (Exception ex) {
             Logger.getLogger(DBManagerProduces.class.getName()).log(Level.SEVERE, null, ex);
