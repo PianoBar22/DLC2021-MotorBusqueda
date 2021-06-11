@@ -555,5 +555,7 @@ public class DBManager {
         this.setUrl(config.getUrl());
         this.setUserName(config.getUserName());
         this.setPassword(config.getPassword());
+        
+        this.setResourceName(config.getResourceName());
     }
 }

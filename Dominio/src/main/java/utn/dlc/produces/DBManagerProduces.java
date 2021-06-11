@@ -19,7 +19,7 @@ import utn.dlc.entidades.ConfigDB;
  * @author CC31899077
  */
 public class DBManagerProduces {
-    @Inject ConfigDB config;
+    //@Inject ConfigDB config;
 
     @Produces
     public static DBManagerVocabulario createVocabulario(){

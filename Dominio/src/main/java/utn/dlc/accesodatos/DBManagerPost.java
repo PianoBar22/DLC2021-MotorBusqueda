@@ -5,6 +5,7 @@
  */
 package utn.dlc.accesodatos;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import utn.dlc.entidades.Post;
@@ -16,6 +17,11 @@ import utn.dlc.produces.DBManagerProduces;
  * @author CC31899077
  */
 public class DBManagerPost extends DBManager {
+    private static final String ID = "IdPost";
+    private static final String IdVocabulario = "IdVocabulario";
+    private static final String IdDocumento = "IdDocumento";
+    private static final String Frecuencia = "Frecuencia";
+    
     private final DBManagerVocabulario dbVocabulario;
     private final DBManagerDocumento dbDocumento;
 
@@ -23,6 +29,36 @@ public class DBManagerPost extends DBManager {
         super();
         this.dbVocabulario = DBManagerProduces.createVocabulario();
         this.dbDocumento = DBManagerProduces.createDocumento();
+    }
+    
+    public ArrayList<Post> searchByVocabulario(ArrayList<Vocabulario> vocabulario) throws Exception{
+        ArrayList<Post> retPosteos = new ArrayList<>();
+        StringBuilder sbQuery = new StringBuilder();
+        
+        sbQuery.append("SELECT p.ID As IdPost, p.IdVocabulario, p.IdDocumento, p.Frecuencia, ");
+        sbQuery.append(" v.Palabra, v.CantDocumentos, v.MaxRf, ");
+        sbQuery.append(" d.PathDoc ");
+        sbQuery.append("FROM Post p ");
+        sbQuery.append(" INNER JOIN Vocabulario v ON ");
+        sbQuery.append(" v.ID = p.IdVocabulario ");
+        sbQuery.append(" INNER JOIN Documentos d ON ");
+        sbQuery.append(" d.ID = p.IdDocumento ");
+        sbQuery.append("WHERE IdVocabulario IN (");
+        for(Vocabulario palabra : vocabulario){
+            if (vocabulario.indexOf(palabra) > 0){
+                sbQuery.append(", ");
+            }
+            sbQuery.append(palabra.getId());
+        }
+        sbQuery.append(") ");
+        try (ResultSet rs = this.executeQuery(sbQuery.toString())) {
+            Post post;
+            while ((post = buildPost(rs)) != null) {
+                retPosteos.add(post);
+            }
+        }
+        
+        return retPosteos;
     }
     
     public long saveDB(ArrayList<Post> list) throws Exception {
@@ -91,6 +127,23 @@ public class DBManagerPost extends DBManager {
             Post post = listToAdd.get(i);
             post.setId(listIndex.get(i));
         }
+    }
+
+    public Post buildPost(ResultSet rs) throws SQLException {
+        Post post = null;
+        if (rs.next()) {
+            post = new Post(rs.getLong(ID), 
+                            dbVocabulario.build(rs),
+                            dbDocumento.build(rs),
+                            rs.getLong(Frecuencia));
+        }
+        return post;
+    }
+
+    public ArrayList<Post> searchByVocabulario(Vocabulario voc) throws Exception {
+        ArrayList<Vocabulario> ret = new ArrayList<>();
+        ret.add(voc);
+        return this.searchByVocabulario(ret);
     }
     
 }

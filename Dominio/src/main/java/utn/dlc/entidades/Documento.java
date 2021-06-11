@@ -5,14 +5,17 @@
  */
 package utn.dlc.entidades;
 
+import java.util.Objects;
+
 /**
  *
  * @author CC31899077
  */
-public class Documento {
+public class Documento implements Comparable<Documento>{
     
     private String path;
     private Long id;
+    private float indiceRelevancia;
 
     public Documento(long id, String path) {
         this.path = path;
@@ -50,4 +53,28 @@ public class Documento {
         this.path = path;
     }
 
+    public float getIndiceRelevancia() {
+        return indiceRelevancia;
+    }
+
+    public void setIndiceRelevancia(float indiceRelevancia) {
+        this.indiceRelevancia = indiceRelevancia;
+    }
+
+    @Override
+    public int compareTo(Documento o) {
+        return Float.compare(this.getIndiceRelevancia(), o.getIndiceRelevancia());
+    }
+
+    @Override
+    public String toString() {
+        return "Documento nro " + this.getId() + ", Path: " + this.getPath() + ", Indice Relevancia: " + this.getIndiceRelevancia();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return Objects.equals(this.getId(), ((Documento)obj).getId());
+    }
+
+    
 }

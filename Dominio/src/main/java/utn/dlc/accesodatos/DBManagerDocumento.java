@@ -5,7 +5,10 @@
  */
 package utn.dlc.accesodatos;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utn.dlc.entidades.Documento;
 import utn.dlc.entidades.Vocabulario;
 
@@ -14,7 +17,42 @@ import utn.dlc.entidades.Vocabulario;
  * @author CC31899077
  */
 public class DBManagerDocumento extends DBManager{
-
+    private static final String ID = "IdDocumento";
+    private static final String PATH_DOC = "PathDoc";
+    
+    public Documento build(ResultSet rs){
+        try {
+            return new Documento(
+                    rs.getLong(ID),
+                    rs.getString(PATH_DOC));
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    private Documento buildDocumento(ResultSet rs) throws SQLException{
+        Documento documento = null;
+        if (rs.next()) {
+            documento = this.build(rs);
+        }
+        return documento;
+    }
+    
+    public long getCantDocumentos() throws Exception{
+        StringBuilder query = new StringBuilder();
+        
+        query.append("SELECT COUNT(*) CantDocumentosTotal FROM Documentos");
+        
+        try (ResultSet rs = this.executeQuery(query.toString())) {
+            if(rs.next()){
+                return rs.getLong(1);
+            }
+            else{
+                return 0;
+            }
+        }
+    }
+    
     public long saveDB(Documento documento) throws Exception {
         if (documento==null) throw new Exception("DBAlumno Error: Alumno NO especificado");
         long newId = 0;

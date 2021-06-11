@@ -9,7 +9,7 @@ package utn.dlc.entidades;
  *
  * @author CC31899077
  */
-public class Vocabulario {
+public class Vocabulario implements Comparable {
     private Long id;
     private String palabra;
     private Long cant_documentos;
@@ -75,6 +75,13 @@ public class Vocabulario {
     @Override
     public String toString() {
         return "Vocabulario{" + "id=" + id + ", palabra=" + palabra + ", cant_documentos=" + cant_documentos + ", max_rf=" + max_rf + '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Vocabulario voc = (Vocabulario) o;
+        
+        return this.getCant_documentos().compareTo(voc.getCant_documentos());
     }
     
     

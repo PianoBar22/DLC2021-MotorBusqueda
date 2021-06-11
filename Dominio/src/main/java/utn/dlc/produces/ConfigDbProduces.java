@@ -19,7 +19,7 @@ public class ConfigDbProduces {
     private static String DBUserName = "root";
     private static String DBPassword = "root";
 
-    private static String DBResourceName = "jdbc/homedb";
+    private static String DBResourceName = "jdbc/_DLCMotorBusqueda";
     
     @Produces
     public static ConfigDB create(){
@@ -30,6 +30,8 @@ public class ConfigDbProduces {
         config.setUrl(DBUrl);
         config.setUserName(DBUserName);
         config.setPassword(DBPassword);
+        
+        config.setResourceName(DBResourceName);
         
         return config;
     }

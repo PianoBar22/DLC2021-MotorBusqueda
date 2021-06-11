@@ -76,7 +76,7 @@ public class ProcesadorArchivos {
         }
 }
 
-    void ActualizarVocabulario() {
+    public void ActualizarVocabulario() {
         try {
             this.posteoNegocio.ActualizarVocabulario();
         } catch (Exception ex) {

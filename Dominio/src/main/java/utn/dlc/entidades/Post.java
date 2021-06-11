@@ -14,12 +14,14 @@ public class Post {
     private Vocabulario vocabulario;
     private Documento documento;
     private long frecuencia;
+    private float indiceRelevancia;
 
     public Post(Vocabulario vocabulario, Documento documento, long frecuencia) {
         this.vocabulario = vocabulario;
         this.documento = documento;
         this.frecuencia = frecuencia;
         this.id = 0L;
+        this.indiceRelevancia = 0F;
     }
     
     public Post(long id, Vocabulario vocabulario, Documento documento, long frecuencia) {
@@ -27,6 +29,7 @@ public class Post {
         this.documento = documento;
         this.frecuencia = frecuencia;
         this.id = id;
+        this.indiceRelevancia = 0F;
     }
 
     public long getId() {
@@ -60,6 +63,12 @@ public class Post {
     public void setFrecuencia(long frecuencia) {
         this.frecuencia = frecuencia;
     }
-    
-    
+
+    public float getIndiceRelevancia() {
+        return indiceRelevancia;
+    }
+
+    public void setIndiceRelevancia(float indiceRelevancia) {
+        this.indiceRelevancia = indiceRelevancia;
+    }
 }

@@ -11,28 +11,39 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import utn.dlc.entidades.Vocabulario;
+import utn.dlc.soporte.Heap;
 
 /**
  *
  * @author CC31899077
  */
-public class DBManagerVocabulario extends DBManager{
-    private static final String ID = "ID";
+    public class DBManagerVocabulario extends DBManager{
+    private static final String ID = "IdVocabulario";
     private static final String PALABRA = "Palabra";
     private static final String CANT_DOC = "CantDocumentos";
     private static final String MAXRF = "MaxRf";
     
-    private static Vocabulario buildVocabulario(ResultSet rs) throws SQLException {
+    public Vocabulario build(ResultSet rs){
+        try {
+            return new Vocabulario(
+                    rs.getLong(ID),
+                    rs.getString(PALABRA),
+                    rs.getLong(CANT_DOC),
+                    rs.getLong(MAXRF));
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+    
+    private Vocabulario buildVocabulario(ResultSet rs) throws SQLException {
         Vocabulario vocabulario = null;
         if (rs.next()) {
-            vocabulario = new Vocabulario(
-                            rs.getLong(ID), 
-                            rs.getString(PALABRA),
-                            rs.getLong(CANT_DOC),
-                            rs.getLong(MAXRF));
+            vocabulario = this.build(rs);
         }
         return vocabulario;
     }
@@ -55,7 +66,7 @@ public class DBManagerVocabulario extends DBManager{
         if (limit<0) throw new Exception("DBVocabulario Error: limit incorrecto");
         if (offset<0) throw new Exception("DBVocabulario Error: offset incorrecto");
         List vocabularios = new ArrayList();
-        String query = "SELECT * " +
+        String query = "SELECT ID As IdVocabulario, Palabra, CantDocumentos, MaxRf " +
                 "FROM Vocabulario v " +
               //  "WHERE " +
                 "ORDER BY v.CantDocumentos desc ";
@@ -84,13 +95,38 @@ public class DBManagerVocabulario extends DBManager{
     
     public HashMap<String, Vocabulario> loadListHash() throws Exception{
         ArrayList<Vocabulario> list = (ArrayList<Vocabulario>) this.loadList(0, 0);
-        HashMap<String, Vocabulario> map = new HashMap<String, Vocabulario>();
+        HashMap<String, Vocabulario> map = new HashMap<>();
         
-        for(Vocabulario voc : list){
+        list.forEach(voc -> {
             map.put(voc.getPalabra(), voc);
-        }
+        });
         return map;
     }
+    
+    public ArrayList<Vocabulario> searchVocabulario(ArrayList<String> palabras) throws Exception{
+        ArrayList<Vocabulario> vocabularios = new ArrayList<>();
+        StringBuilder sbQuery = new StringBuilder();
+        
+        sbQuery.append("SELECT ID As IdVocabulario, Palabra, CantDocumentos, MaxRf FROM Vocabulario v ");
+        sbQuery.append("WHERE Palabra IN (");
+        for(String palabra : palabras){
+            if (palabras.indexOf(palabra) > 0){
+                sbQuery.append(", ");
+            }
+            sbQuery.append("'").append(palabra).append("'");
+        }
+        sbQuery.append(") ");
+        sbQuery.append("ORDER BY v.CantDocumentos asc");
+        try (ResultSet rs = this.executeQuery(sbQuery.toString())) {
+            Vocabulario vocabulario;
+            while ((vocabulario = buildVocabulario(rs)) != null) {
+                vocabularios.add(vocabulario);
+            }
+        }
+
+        return vocabularios;
+    }
+    
     /**
      * Guarda un alumno en la ddbb.
      *
